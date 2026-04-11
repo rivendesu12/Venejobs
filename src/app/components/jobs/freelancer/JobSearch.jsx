@@ -1,12 +1,15 @@
 import jobApiStore from "@/app/store/jobStore";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import SvgIcon from "@/app/components/Utility/SvgIcon";
 import ReadMoreBtn from "../../button/ReadMoreBtn";
 import JobFilterSidebar from "../client/JobFilterSidebar";
 import PaginationFreelance from "../../Pagination/PaginationFreelance";
+import { Routes } from "@/app/routes";
 
 export default function JobSearch() {
+  const router = useRouter();
   const [showFilters, setShowFilters] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -97,8 +100,9 @@ export default function JobSearch() {
         ) : (
           jobs?.map((item) => (
             <div
-              className="flex flex-col p-5 border rounded border-gray-200 gap-4"
               key={item.id}
+              onClick={() => router.push(`${Routes.freelancer.jobdetail}?id=${item.id}`)}
+              className="flex flex-col p-5 border rounded border-gray-200 gap-4 hover:border-secondary transition-colors cursor-pointer"
             >
               {/* title and image */}
               <div className="flex items-center gap-2">

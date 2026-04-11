@@ -1,5 +1,7 @@
 export const Routes = {
   home: "/",
+  messages: "/messages",
+
   client: {
     home: "/client",
     chat: "/client/chat/",

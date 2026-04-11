@@ -1,50 +1,72 @@
-import React from "react";
 import SvgIcon from "@/app/components/Utility/SvgIcon";
 
-const RightPanel = () => {
+const RightPanel = ({ job }) => {
+  if (!job) return null;
+
+  const jobUrl = typeof window !== "undefined"
+    ? window.location.href
+    : "";
+
+  function copyLink() {
+    if (jobUrl) navigator.clipboard.writeText(jobUrl).catch(() => {});
+  }
+
   return (
-    <div className="lg:mx-auto flex flex-col-reverse lg:flex-col gap-8 lg:gap-14 lg:border-l border-gray-200 lg:pl-6">
-      <div className="flex flex-col gap-6">
-        <button className="text-primary w-full font-medium text-lg flex items-center gap-6 cursor-pointer">
+    <div className="lg:w-56 flex flex-col-reverse lg:flex-col gap-8 lg:border-l border-[#44444414] lg:pl-6">
+
+      {/* Actions */}
+      <div className="flex flex-col gap-4">
+        <button className="text-primary w-full font-medium text-base flex items-center gap-4 cursor-pointer hover:opacity-75">
           <SvgIcon name="PostEdit" /> Edit posting
         </button>
-        <button className="text-primary w-full font-medium text-lg flex items-center gap-6 cursor-pointer">
-          <SvgIcon name="Eye2" size={24} /> View Posting
+        <button className="text-primary w-full font-medium text-base flex items-center gap-4 cursor-pointer hover:opacity-75">
+          <SvgIcon name="Eye2" size={22} /> View posting
         </button>
-        <button className="text-primary w-full font-medium text-lg flex items-center gap-6 cursor-pointer">
-          <SvgIcon name="DeleteRed" size={24} /> Remove posting
+        <button className="text-red-500 w-full font-medium text-base flex items-center gap-4 cursor-pointer hover:opacity-75">
+          <SvgIcon name="DeleteRed" size={22} /> Remove posting
         </button>
       </div>
-      <div className="flex flex-col gap-6 md:gap-10 border-b border-[#44444414] lg:border-none">
-        <div className="flex flex-col gap-3">
-          <h3 className="flex gap-6 font-semibold text-lg text-heading">
-            About the client
-            <SvgIcon name="Editing" size={21} />
-          </h3>
-          <p className="flex gap-4 text-paragraph text-base font-medium">
-            <SvgIcon name="NotVerified" />
-            Payment method not verified
-          </p>
-          <p className="flex gap-4 text-paragraph text-base font-medium">
-            <SvgIcon name="Verified" />
-            Phone number verified
-          </p>
-        </div>
-        <div className="flex flex-col gap-3">
-          <h3 className="font-semibold text-lg text-heading">Pakistan</h3>
-          <p className="text-paragraph text-base font-medium">1:14 AM</p>
+
+      {/* Job info summary */}
+      <div className="flex flex-col gap-5 border-b border-[#44444414] lg:border-none pb-8 lg:pb-0">
+        <div className="flex flex-col gap-2">
+          <h3 className="font-semibold text-base text-heading">Job status</h3>
+          <span className={`inline-flex items-center gap-2 text-sm font-semibold capitalize
+            ${job.status === "published" ? "text-secondary" : "text-paragraph"}`}>
+            <span className={`w-2 h-2 rounded-full inline-block
+              ${job.status === "published" ? "bg-secondary" : "bg-gray-400"}`} />
+            {job.status}
+          </span>
         </div>
 
-        <div className="flex flex-col gap-4 mt-2 md:mt-0 mb-10">
-          <h2 className="font-semibold text-lg text-heading">Job Link</h2>
+        <div className="flex flex-col gap-2">
+          <h3 className="font-semibold text-base text-heading">Budget</h3>
+          <p className="text-paragraph text-sm font-medium capitalize">
+            ${Number(job.budget_amount).toLocaleString()} · {job.budget_type}
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <h3 className="font-semibold text-base text-heading">Experience</h3>
+          <p className="text-paragraph text-sm font-medium capitalize">
+            {job.experience_level}
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-3">
+          <h2 className="font-semibold text-base text-heading">Job link</h2>
           <input
             type="text"
-            name=""
-            id=""
-            className="border border-gray-200 px-2 py-2 rounded"
-            placeholder="https://www.upwork.com/jobs/~021866835538461740469"
+            readOnly
+            value={jobUrl}
+            className="border border-gray-200 px-2 py-2 rounded text-xs text-paragraph w-full"
           />
-          <p className="text-primary font-semibold text-base">Copy link</p>
+          <button
+            onClick={copyLink}
+            className="text-primary font-semibold text-sm text-left hover:underline"
+          >
+            Copy link
+          </button>
         </div>
       </div>
     </div>

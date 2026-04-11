@@ -51,11 +51,11 @@ export default function HomeNavbar() {
       href: "",
       icon: "",
     },
-    // {
-    //   label: "Message",
-    //   href: Routes.client.chat,
-    //   icon: "",
-    // },
+    {
+      label: "Message",
+      href: Routes.messages,
+      icon: "",
+    },
   ];
 
   const SidebarLinks = [
@@ -88,7 +88,7 @@ export default function HomeNavbar() {
     },
     {
       label: "Message",
-      href: Routes.client.chat,
+      href: Routes.messages,
       icon: "",
     },
   ];

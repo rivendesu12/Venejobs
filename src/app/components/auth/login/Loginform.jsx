@@ -6,10 +6,10 @@ import axios from "axios";
 
 import userApiStore from "@/app/store/userStore";
 import toastStore from "@/app/store/toastStore";
-import LoginModalWrapper from "../login/LoginModalWrapper";
-import LoginHeader from "../login/LoginHeader";
-import LoginFormFields from "../login/LoginFormFields";
-import LoginActions from "../login/LoginActions";
+import LoginModalWrapper from "./LoginModalWrapper";
+import LoginHeader from "./LoginHeader";
+import LoginFormFields from "./LoginFormFields";
+import LoginActions from "./LoginActions";
 import freelancerApiStore from "@/app/store/freelancerApiStore";
 import { Routes } from "@/app/routes";
 
@@ -62,7 +62,7 @@ export default function Loginform({ setActiveModal, setUserEmail }) {
       }
 
       if (user?.role_name === "admin") {
-        router.replace("/admin");
+        router.replace(Routes.home);
         return;
       }
 

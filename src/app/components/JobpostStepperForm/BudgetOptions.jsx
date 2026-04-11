@@ -78,9 +78,9 @@ const BudgetOptions = ({ nextStep, prevStep, setStep, fromReview }) => {
                   : budget_data?.map((item) => (
                     <label
                       key={item.id}
-                      htmlFor={item.id}
-                      className="flex justify-between items-start gap-4 bg-neutral-primary-soft 
-                 border border-[#D0D5DD] rounded-lg p-5 hover:bg-neutral-secondary-medium 
+                      htmlFor={`budget_type_${item.code}`}
+                      className="flex justify-between items-start gap-4 bg-neutral-primary-soft
+                 border border-[#D0D5DD] rounded-lg p-5 hover:bg-neutral-secondary-medium
                  cursor-pointer w-full h-full transition-all has-checked:bg-[#5BBB7B0D]">
                       {/* Left Content */}
                       <div className="flex flex-col gap-3 w-full">
@@ -119,7 +119,7 @@ const BudgetOptions = ({ nextStep, prevStep, setStep, fromReview }) => {
 
                       {/* Radio — fully clickable because wrapped in label */}
                       <input
-                        id={item.id}
+                        id={`budget_type_${item.code}`}
                         type="radio"
                         value={item.code}
                         {...register("budget_type", {

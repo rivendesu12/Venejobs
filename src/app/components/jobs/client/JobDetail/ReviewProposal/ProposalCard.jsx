@@ -1,116 +1,137 @@
-import Image from "next/image";
 import SvgIcon from "@/app/components/Utility/SvgIcon";
 import ReadMoreBtn from "../../../../button/ReadMoreBtn";
+import Link from "next/link";
 
-export default function ProposalCard({ onOpen }) {
-  const freelancers = [1, 2];
-  const skills = ["Landing Page", "Web Design", "Prototype", "UX/UI Design", "JavaScript"];
+function initials(name) {
+  return (name ?? "?")
+    .split(" ")
+    .map((w) => w[0] ?? "")
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+}
+
+export default function ProposalCard({ proposal, onOpen }) {
+  if (!proposal) return null;
+
+  const {
+    freelancer_name,
+    offered_price,
+    estimated_days,
+    cover_letter,
+    status,
+    conversation_id,
+  } = proposal;
 
   return (
-    <>
-      {freelancers.map((_, i) => (
-        <div className="flex flex-col gap-8 md:gap-10" key={i} >
-          <div className="flex flex-col lg:flex-row gap-8 lg:gap-15">
-            <div className="flex w-full lg:w-[50%] flex-col gap-6">
-              {/* title and image */}
-              <div className="flex items-center gap-6 w-full lg:w-auto justify-between">
-                <div className="flex items-center gap-3.5 md:gap-6 w-full md:w-auto">
-                  <Image src="/freelancer.jpg" alt="Freelancer image"
-                    width={64}
-                    height={64}
-                    className="rounded-full w-15 h-15 md:w-16 md:h-16 cursor-pointer"
-                    onClick={onOpen}
-                  />
-                  <div className="flex flex-col gap-2">
-                    <div className="flex flex-row items-center gap-2 lg:gap-4 cursor-pointer" onClick={onOpen}>
-                      <h3 className="text-lg lg:text-2xl text-heading font-semibold">
-                        Alishan Noor
-                      </h3>
-                    </div>
-                    <p className="text-paragraph text-sm lg:text-base font-normal">
-                      UX/UI Designer | Expert in Website | App | Software | Figma
-                    </p>
+    <div className="flex flex-col gap-8 md:gap-10">
+      <div className="flex flex-col lg:flex-row gap-8 lg:gap-15">
 
-                    <div className="flex flex-row items-center gap-10">
-                      <p className="text-heading text-sm lg:text-base font-semibold">
-                        100k Earned&nbsp;
-                      </p>
-                      <p className="flex gap-4 text-sm text-paragraph lg:text-[15px] font-medium">
-                        <SvgIcon name="Star" /> 5.0 (1 Review)
-                      </p>
-                    </div>
-                  </div>
-                </div>
+        {/* Left — freelancer info */}
+        <div className="flex w-full lg:w-[50%] flex-col gap-6">
+          <div className="flex items-center gap-6 w-full justify-between">
+            <div className="flex items-center gap-3.5 md:gap-6 w-full md:w-auto">
 
-              </div>
-              {/*category and skills */}
-              <div className="flex items-center gap-3 flex-wrap">
-                {skills.map((skill, index) => (
-                  <p className="text-sm lg:text-base cursor-pointer
-                    relative overflow-hidden
-                    bg-[#FAFAFA] px-4 py-2 font-medium text-paragraph rounded-full
-                    transition-all duration-300
-                    before:content-[''] before:absolute before:inset-0
-                    before:bg-gray-200 before:-translate-x-full before:transition-transform before:duration-300
-                    before:-z-10
-                    hover:before:translate-x-0
-                    z-10" key={index}>
-                    {skill}
-                  </p>
-                ))}
+              {/* Avatar initials */}
+              <div
+                onClick={onOpen}
+                className="w-16 h-16 rounded-full bg-primary text-white flex items-center justify-center font-bold text-lg cursor-pointer flex-shrink-0"
+              >
+                {initials(freelancer_name)}
               </div>
 
-              {/* buttons [desktop] */}
-              <div className="hidden lg:flex items-center mt-2 gap-8 w-full">
-                <button className="bg-primary font-semibold p-2 w-[120px] xl:w-[180px] xl:py-4 rounded text-white text-xs md:text-base cursor-pointer">Hire</button>
-                <button className="bg-white font-semibold p-2 w-[120px] xl:w-[180px] xl:py-4 rounded text-paragraph text-xs md:text-base cursor-pointer border border-[#FAFAFA]" style={{ boxShadow: "2px 2px 50px 5px #0000000D" }}>
-                  Message
-                </button>
-                <button className="text-primary text-xs md:text-sm flex flex-col items-center gap-2">
-                  <SvgIcon name="Like" size={24} />Shortlisted
-                </button>
-                <button className="text-paragraph text-xs md:text-sm flex flex-col items-center gap-2">
-                  <SvgIcon name="Archive" size={24} />Archive
-                </button>
-              </div>
-            </div>
-            <div className="w-full lg:w-[50%]">
-              {/* job desc */}
-              <div className="flex flex-col gap-4">
-                <div className="flex flex-row items-center justify-between">
-                  <p className="text-heading text-base md:text-lg font-semibold">
-                    Cover letter
-                  </p>
-                  <p className="text-sm md:text-base font-semibold text-heading">
-                    Proposed bid: <span className="text-xs md:text-sm font-medium text-paragraph ml-2">$20.00</span>
-                  </p>
+              <div className="flex flex-col gap-2">
+                <div className="flex flex-row items-center gap-2 lg:gap-4 cursor-pointer" onClick={onOpen}>
+                  <h3 className="text-lg lg:text-2xl text-heading font-semibold">
+                    {freelancer_name ?? "Freelancer"}
+                  </h3>
                 </div>
-                <ReadMoreBtn text="We are seeking a talented and experienced UI/UX Designer to join our team and help us create a visually stunning and user-friendly mobile app. The ideal candidate will have a strong portfolio showcasing their ability to design intuitive, modern, and engaging interfaces for mobile applications. This project involves designing the entire user experience and interface for a mobile.This project involves designing the entire user experience and interface for a mobile.This project involves designing the entire user experience and interface for a mobile." paragraphFont="font-normal leading-8" font="text-primary text-normal" clampClass="line-clamp-6 lg:line-clamp-4" />
-                <div className="flex flex-col md:flex-row mt-2 gap-3 md:gap-7 xl:gap-15">
-                  <p className="flex gap-3 text-paragraph text-sm md:text-base font-medium"><SvgIcon name="Premium" size={18} />100% job success</p>
-                  <p className="flex gap-3 text-paragraph text-sm md:text-base font-medium"><SvgIcon name="Brifcase" size={18} />3 projects completed</p>
-                  <p className="flex gap-3 text-paragraph text-sm md:text-base font-medium"><SvgIcon name="Dollar" size={18} />100k Earned</p>
-                </div>
-                {/* buttons [mobile] */}
-                <div className="lg:hidden flex items-center mt-2 gap-8 w-full">
-                  <button className="bg-primary font-semibold p-2 w-[120px] xl:w-[180px] xl:py-4 rounded text-white text-xs md:text-base cursor-pointer">Hire</button>
-                  <button className="bg-white font-semibold p-2 w-[120px] xl:w-[180px] xl:py-4 rounded text-paragraph text-xs md:text-base cursor-pointer border border-[#FAFAFA]" style={{ boxShadow: "2px 2px 50px 5px #0000000D" }}>
-                    Message
-                  </button>
-                  <button className="text-primary text-xs md:text-sm flex flex-col items-center gap-2">
-                    <SvgIcon name="Like" size={24} />Shortlisted
-                  </button>
-                  <button className="text-paragraph text-xs md:text-sm flex flex-col items-center gap-2">
-                    <SvgIcon name="Archive" size={24} />Archive
-                  </button>
+
+                <div className="flex flex-row items-center gap-6">
+                  <span className={`text-xs font-semibold px-3 py-1 rounded-full capitalize
+                    ${status === "accepted" ? "bg-green-100 text-green-700"
+                      : status === "rejected" ? "bg-red-100 text-red-600"
+                      : "bg-gray-100 text-paragraph"}`}>
+                    {status}
+                  </span>
                 </div>
               </div>
             </div>
           </div>
-          {i !== freelancers.length - 1 && <hr className="border-[#44444414]" />}
+
+          {/* Action buttons */}
+          <div className="hidden lg:flex items-center mt-2 gap-6 flex-wrap">
+            <button className="bg-primary font-semibold px-5 py-2.5 rounded text-white text-sm cursor-pointer">
+              Hire
+            </button>
+            {conversation_id && (
+              <Link
+                href={`/conversations/${conversation_id}`}
+                className="bg-white font-semibold px-5 py-2.5 rounded text-paragraph text-sm cursor-pointer border border-gray-100"
+                style={{ boxShadow: "2px 2px 50px 5px #0000000D" }}
+              >
+                Message
+              </Link>
+            )}
+            <button className="text-primary text-xs md:text-sm flex flex-col items-center gap-1">
+              <SvgIcon name="Like" size={22} />Shortlist
+            </button>
+            <button className="text-paragraph text-xs md:text-sm flex flex-col items-center gap-1">
+              <SvgIcon name="Archive" size={22} />Archive
+            </button>
+          </div>
         </div>
-      ))
-      }
-    </>
+
+        {/* Right — cover letter + bid */}
+        <div className="w-full lg:w-[50%]">
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-row items-center justify-between">
+              <p className="text-heading text-base md:text-lg font-semibold">Cover letter</p>
+              <p className="text-sm md:text-base font-semibold text-heading">
+                Bid: <span className="text-xs md:text-sm font-medium text-paragraph ml-2">
+                  ${Number(offered_price).toLocaleString()}
+                </span>
+              </p>
+            </div>
+
+            <ReadMoreBtn
+              text={cover_letter}
+              paragraphFont="font-normal leading-8"
+              font="text-primary text-normal"
+              clampClass="line-clamp-6 lg:line-clamp-4"
+            />
+
+            <div className="flex flex-col md:flex-row mt-2 gap-3 md:gap-7">
+              <p className="flex gap-3 text-paragraph text-sm md:text-base font-medium">
+                <SvgIcon name="Clock" size={18} />{estimated_days} day{estimated_days !== 1 ? "s" : ""} estimated
+              </p>
+            </div>
+
+            {/* Mobile buttons */}
+            <div className="lg:hidden flex items-center mt-2 gap-6 flex-wrap">
+              <button className="bg-primary font-semibold px-5 py-2.5 rounded text-white text-sm cursor-pointer">
+                Hire
+              </button>
+              {conversation_id && (
+                <Link
+                  href={`/conversations/${conversation_id}`}
+                  className="bg-white font-semibold px-5 py-2.5 rounded text-paragraph text-sm cursor-pointer border border-gray-100"
+                  style={{ boxShadow: "2px 2px 50px 5px #0000000D" }}
+                >
+                  Message
+                </Link>
+              )}
+              <button className="text-primary text-xs flex flex-col items-center gap-1">
+                <SvgIcon name="Like" size={22} />Shortlist
+              </button>
+              <button className="text-paragraph text-xs flex flex-col items-center gap-1">
+                <SvgIcon name="Archive" size={22} />Archive
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
   );
 }

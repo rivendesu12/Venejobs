@@ -52,10 +52,15 @@ export default function HomeNavbarMobileFreelance({
             <Link
               key={item.label}
               href={item.href}
-              className="py-2.5 px-2 text-base font-medium text-gray-600 hover:bg-gray-100 rounded-lg w-full transition"
+              className="relative py-2.5 px-2 text-base font-medium text-gray-600 hover:bg-gray-100 rounded-lg w-full transition flex items-center justify-between"
               onClick={() => setIsOpen(false)}
             >
-              {item.label}
+              <span>{item.label}</span>
+              {item.badge > 0 && (
+                <span className="min-w-5 h-5 rounded-full bg-red-500 text-white text-[11px] font-bold flex items-center justify-center px-1.5 leading-none">
+                  {item.badge > 99 ? "99+" : item.badge}
+                </span>
+              )}
             </Link>
           ))}
 

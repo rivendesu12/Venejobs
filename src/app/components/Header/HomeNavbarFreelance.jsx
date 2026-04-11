@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import ProfileDropdown from "./ProfileDropdown";
 import { Routes } from "../../routes";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SvgIcon from "../Utility/SvgIcon";
 import { useRouter } from "next/navigation";
 import toastStore from "../../store/toastStore";
@@ -15,12 +15,35 @@ import HomeNavbarMobileFreelance from "../navbar/HomeNavbarMobileFreelance";
 export default function HomeNavbarFreelance() {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   const showSuccess = toastStore.getState().showSuccess;
   const showError = toastStore.getState().showError;
 
   const { user, logout } = userApiStore();
   const { freelanceDetails } = freelancerApiStore();
+
+  // Fetch total unread message count
+  useEffect(() => {
+    async function fetchUnread() {
+      try {
+        const res = await fetch("/api/inbox");
+        if (!res.ok) return;
+        const data = await res.json();
+        const total = (data.inbox ?? []).reduce(
+          (sum, c) => sum + (c.unread_count ?? 0),
+          0
+        );
+        setUnreadCount(total);
+      } catch {
+        // non-critical
+      }
+    }
+
+    fetchUnread();
+    const id = setInterval(fetchUnread, 30_000);
+    return () => clearInterval(id);
+  }, []);
 
   const user_logout = () => {
     try {
@@ -33,13 +56,9 @@ export default function HomeNavbarFreelance() {
     }
   };
 
-  // Logo navigation logic
   const handleLogoClick = (e) => {
     e.preventDefault();
-
-    const completed =
-      freelanceDetails?.freelancerProfile?.profile_completed;
-
+    const completed = freelanceDetails?.freelancerProfile?.profile_completed;
     if (completed) {
       router.push(Routes.freelancer.page);
     } else {
@@ -48,22 +67,9 @@ export default function HomeNavbarFreelance() {
   };
 
   const NavLinks = [
-    {
-      label: "Find Work",
-      href: Routes.freelancer.page,
-    },
-    {
-      label: "Deliver Work",
-      href: "",
-    },
-    {
-      label: "Manage Finances",
-      href: "",
-    },
-    {
-      label: "Message",
-      href: "",
-    },
+    { label: "Find Work", href: Routes.freelancer.page },
+    { label: "Deliver Work", href: "" },
+    { label: "Manage Finances", href: "" },
   ];
 
   const SidebarLinks = [
@@ -72,22 +78,10 @@ export default function HomeNavbarFreelance() {
       href: Routes.freelancer.profileData,
       className: "text-3xl sm:text-2xl text-paragraph px-4 font-medium",
     },
-    {
-      label: "Find Work",
-      href: Routes.freelancer.page,
-    },
-    {
-      label: "Deliver Work",
-      href: "",
-    },
-    {
-      label: "Manage Finances",
-      href: "",
-    },
-    {
-      label: "Message",
-      href: "",
-    },
+    { label: "Find Work", href: Routes.freelancer.page },
+    { label: "Deliver Work", href: "" },
+    { label: "Manage Finances", href: "" },
+    { label: "Message", href: Routes.messages, badge: unreadCount },
   ];
 
   return (
@@ -109,10 +103,7 @@ export default function HomeNavbarFreelance() {
                 height={50}
                 width={50}
               />
-
-              <h2 className="text-gray-600 text-lg font-extrabold">
-                Venejobs
-              </h2>
+              <h2 className="text-gray-600 text-lg font-extrabold">Venejobs</h2>
             </Link>
 
             {/* Desktop Nav */}
@@ -127,6 +118,21 @@ export default function HomeNavbarFreelance() {
                       <Link href={item.href}>{item.label}</Link>
                     </li>
                   ))}
+
+                  {/* Message link with badge */}
+                  <li className="text-paragraph text-base font-medium">
+                    <Link
+                      href={Routes.messages}
+                      className="relative inline-flex items-center gap-1"
+                    >
+                      Message
+                      {unreadCount > 0 && (
+                        <span className="absolute -top-2 -right-4 min-w-[18px] h-[18px] rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center px-1 leading-none">
+                          {unreadCount > 99 ? "99+" : unreadCount}
+                        </span>
+                      )}
+                    </Link>
+                  </li>
                 </ul>
               </nav>
             </div>

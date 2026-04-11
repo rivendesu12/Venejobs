@@ -1,5 +1,7 @@
 import jobApiStore from "@/app/store/jobStore";
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Routes } from "@/app/routes";
 
 import ReadMoreBtn from "../../button/ReadMoreBtn";
 import PaginationFreelance from "../../Pagination/PaginationFreelance";
@@ -8,6 +10,7 @@ import Image from "next/image";
 import SvgIcon from "../../Utility/SvgIcon";
 
 export default function AllJobs() {
+  const router = useRouter();
   const [page, setPage] = useState(1);
   const limit = 10;
 
@@ -116,7 +119,8 @@ export default function AllJobs() {
       {jobs?.map((item) => (
         <div
           key={item.id}
-          className="rounded-xl border border-[rgba(68,68,68,0.08)] bg-white p-6 flex flex-col gap-4 max-w-[1040px]"
+          onClick={() => router.push(`${Routes.freelancer.jobdetail}?id=${item.id}`)}
+          className="rounded-xl border border-[rgba(68,68,68,0.08)] bg-white p-6 flex flex-col gap-4 max-w-[1040px] cursor-pointer hover:border-secondary transition-colors"
         >
           <div className="flex items-center gap-2">
             <Image

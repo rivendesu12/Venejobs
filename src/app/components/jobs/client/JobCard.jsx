@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import SvgIcon from "@/app/components/Utility/SvgIcon";
 import Button from "../../button/Button";
 import Loader from "../../common/Loader";
@@ -6,6 +7,7 @@ import { getPostedTime } from "@/app/utils/time";
 
 export default function JobCard({ item }) {
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const budgetType = item?.budget_type
     ? item.budget_type.charAt(0).toUpperCase() + item.budget_type.slice(1)
@@ -13,6 +15,7 @@ export default function JobCard({ item }) {
 
   const handleDetailsClick = () => {
     setLoading(true);
+    router.push(`/client/JobDetail/${item.id}`);
   };
 
   return (
